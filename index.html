@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Know The Bible</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,300&display=swap" rel="stylesheet">
+<style>
+      .know{
+        font-family: 'Merriweather', serif;
+        font-size: 25px;
+        font-weight: 700;
+        font-variant: small-caps;
+      }
+
+      .card{
+        height: 100%;
+      }
+</style>
+  </head>
+  <body>
+   
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand text-primary know">Know the Bible</a>
+          <div class="d-flex" role="search">
+           
+            <input class="form-control me-2" type="search" id="srch" placeholder="eg. John 3:14" >
+            <button class="btn btn-outline-secondary" type="submit" onclick="search()">Search</button>
+          </div>
+        </div>
+      </nav>
+      <div class="container mt-4">
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center" id="call">
+        </div></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+
+
+    <script>
+      let url='https://bible-api.com/';
+      let call=document.getElementById("call");
+      function search(){
+          let cv=document.getElementById("srch").value;
+          console.log(cv);
+          console.log(url);
+    
+   
+    if (cv){
+        getVerse(url+cv)
+    }
+}
+
+ async function getVerse(url){
+    console.log(url)
+    let res=await fetch(url); //
+    let data=await res.json();
+    console.log(data.text);
+    if(data.text=="undefined"){
+      alert("Write the book name, chapter and verse correctly, for eg: John 3:14");
+    }
+   showVerse(data);
+}
+
+function showVerse(data) {
+    let newelement=document.createElement("div");
+    newelement.innerHTML=`
+    <div class="card my-4" style="width: 18rem;">
+  
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtcbvmPjBlYbW1hYAyuz3bg_pKsVaD_gtVQ&usqp=CAU" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title"><b>Book:</b> ${data.verses[0].book_name}</h5>
+    <h5 class="card-title"><b>Chapter:</b> ${data.verses[0].chapter}</h5>
+    <h5 class="card-title"><b>Verse:</b> ${data.verses[0].verse}</h5>
+    <p class="card-text"><b>Text:</b> ${data.text}</p>
+  </div>
+</div>
+    `
+    call.appendChild(newelement);
+}
+    </script>
+  </body>
+</html>
